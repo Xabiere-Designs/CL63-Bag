@@ -8,3 +8,22 @@ locals {
     Owner       = var.owner
   })
 }
+
+locals {
+
+  db_secret_policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+
+        Resource = module.rds.db_secret_arn
+      }
+    ]
+  })
+}

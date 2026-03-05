@@ -35,3 +35,22 @@ module "addons" {
   # Make sure cluster exists before addons try to install
   depends_on = [module.eks]
 }
+
+module "app_irsa" {
+
+  source = "../../modules/iam-irsa"
+
+  name = "${local.name}-app-irsa"
+
+  namespace = "app"
+
+  service_account_name = "app-sa"
+
+  oidc_provider_arn = module.eks.oidc_provider_arn
+
+  oidc_issuer_url = module.eks.oidc_issuer_url
+
+  policy_json = local.db_secret_policy
+
+  tags = local.tags
+}
